@@ -4,12 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Liste des annonces</title>
+    <link rel="icon" type="image/png" href="/frontend/images/favicon.png" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header>
       <div class="menu-toggle" onclick="toggleMenu()">☰</div>
       <h1>Liste des annonces d'emploi</h1>
+      <input
+        type="text"
+        id="search"
+        onkeyup="filterAnnonces()"
+        placeholder="Rechercher une annonce par titre..."
+      />
+
       <nav class="sliding-menu">
         <ul>
           <li><a href="#">Annonces</a></li>
@@ -21,54 +29,70 @@
     </header>
     <main>
       <section id="annonces">
-        <!-- Annonce 1 -->
-        <div class="annonce">
-          <h2>Offre d'emploi: Développeur Full Stack</h2>
-          <p>Description: Recherche un développeur Full Stack expérimenté.</p>
-          <p>Salaire: 50000€</p>
-          <p>Lieu: Paris</p>
-          <button class="btn" onclick="showDetails(this)">
-            En savoir plus
-          </button>
-          <div class="details">
-            <p>Plus de détails sur l'offre d'emploi...</p>
-            <button class="btn" onclick="showApplicationForm()">
-              Postuler
-            </button>
-          </div>
-        </div>
-        <!-- Annonce 2 -->
-        <div class="annonce">
-          <h2>Offre d'emploi: Analyste Financier</h2>
-          <p>Description: Poste d'analyste financier junior.</p>
-          <p>Salaire: 40000€</p>
-          <p>Lieu: Lyon</p>
-          <button class="btn" onclick="showDetails(this)">
-            En savoir plus
-          </button>
-          <div class="details">
-            <p>Plus de détails sur l'offre d'emploi...</p>
-            <button class="btn" onclick="showApplicationForm()">
-              Postuler
-            </button>
-          </div>
-        </div>
-        <!-- Annonce 3 -->
-        <div class="annonce">
-          <h2>Offre d'emploi: Infirmier</h2>
-          <p>Description: Besoin d'un infirmier pour un hôpital.</p>
-          <p>Salaire: 35000€</p>
-          <p>Lieu: Marseille</p>
-          <button class="btn" onclick="showDetails(this)">
-            En savoir plus
-          </button>
-          <div class="details">
-            <p>Plus de détails sur l'offre d'emploi...</p>
-            <button class="btn" onclick="showApplicationForm()">
-              Postuler
-            </button>
-          </div>
-        </div>
+        <script>
+          // Récupérer les données depuis le serveur
+          fetch("http://localhost:3000/annonces")
+            .then((response) => response.json())
+            .then((annonces) => {
+              // Sélectionner la section où les annonces doivent être affichées
+              const sectionAnnonces = document.getElementById("annonces");
+
+              // Créer les éléments HTML pour chaque annonce
+              annonces.forEach((annonce) => {
+                const divAnnonce = document.createElement("div");
+                divAnnonce.className = "annonce";
+
+                const h2 = document.createElement("h2");
+                h2.textContent = `Offre d'emploi: ${annonce.titre}`;
+
+                const pEntreprise = document.createElement("p");
+                pEntreprise.textContent = `Employeur: ${annonce.entreprise}`;
+                pEntreprise.className = "details";
+
+                const pDescription = document.createElement("p");
+                pDescription.textContent = `Description: ${annonce.description}`;
+                pDescription.className = "details";
+
+                const pSalaire = document.createElement("p");
+                pSalaire.textContent = `Salaire: ${annonce.salaire}€`;
+                pSalaire.className = "details";
+
+                const pLieu = document.createElement("p");
+                pLieu.textContent = `Lieu: ${annonce.lieu}`;
+                pLieu.className = "details";
+
+                const pDate = document.createElement("p");
+                let date = new Date(annonce.date_publication);
+                let formattedDate = `${date.getDate()}-${
+                  date.getMonth() + 1
+                }-${date.getFullYear()}`;
+                pDate.textContent = `Annonce publiée le: ${formattedDate}`;
+                pDate.className = "details";
+
+                const postuler = document.createElement("button");
+                postuler.className = "btn details";
+                postuler.textContent = "Postuler";
+                postuler.onclick = () => showApplicationForm();
+
+                const button = document.createElement("button");
+                button.className = "btn";
+                button.onclick = () => showDetails(event);
+                button.textContent = "En savoir plus";
+
+                divAnnonce.append(
+                  h2,
+                  pEntreprise,
+                  pDescription,
+                  pSalaire,
+                  pLieu,
+                  pDate,
+                  postuler,
+                  button
+                );
+                sectionAnnonces.appendChild(divAnnonce);
+              });
+            });
+        </script>
       </section>
     </main>
     <footer>
@@ -79,29 +103,48 @@
         <span class="close" onclick="closeApplicationForm()">&times;</span>
         <h2>Postuler à l'annonce</h2>
         <form id="applicationForm">
-          <label for="nom">Nom:</label><br />
-          <input type="text" id="nom" name="nom" required /><br />
-          <label for="prenom">Prénom:</label><br />
-          <input type="text" id="prenom" name="prenom" required /><br />
-          <label for="email">Email:</label><br />
-          <input type="email" id="email" name="email" required /><br />
-          <label for="telephone">Téléphone:</label><br />
-          <input type="tel" id="telephone" name="telephone" /><br />
-          <label for="cv">CV:</label><br />
-          <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" /><br />
-          <label for="lettre_motivation">Lettre de motivation:</label><br />
+          <label for="nom">Nom:</label>
+          <input type="text" id="nom" name="nom" required />
+          <label for="prenom">Prénom:</label>
+          <input type="text" id="prenom" name="prenom" required />
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+          <label for="telephone">Téléphone:</label>
+          <input type="tel" id="telephone" name="telephone" />
+          <label for="cv">CV:</label>
+          <input
+            type="file"
+            id="cv"
+            name="cv"
+            accept=".pdf,.doc,.docx"
+            required
+          />
+          <label for="lettre_motivation">Lettre de motivation:</label>
           <input
             type="file"
             id="lettre_motivation"
             name="lettre_motivation"
             accept=".pdf,.doc,.docx"
-          /><br /><br />
-          <button type="submit">Soumettre</button>
-          <button type="button" onclick="closeApplicationForm()">
+          /><br />
+          <button
+            type="submit"
+            onclick="event.preventDefault(); if(validateForm()) { showToast(event, 'Votre candidature a bien été envoyée'); closeApplicationForm(); }"
+          >
+            Soumettre
+          </button>
+          <button
+            type="button"
+            id="annulerForm"
+            onclick="closeApplicationForm()"
+          >
             Annuler
           </button>
         </form>
-        <div id="confirmationMessage" class="confirmation-message hidden">
+        <div
+          id="confirmationMessage"
+          class="confirmation-message"
+          style="display: none"
+        >
           Votre candidature a bien été envoyée
         </div>
       </div>

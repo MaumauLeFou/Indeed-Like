@@ -1,12 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const pool = require("./db");
+const cors = require("cors");
 
 const app = express();
 
 // Middleware pour parser les requêtes JSON
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 // Import des routes
 const annoncesRoutes = require("./routes/annoncesRoutes");
