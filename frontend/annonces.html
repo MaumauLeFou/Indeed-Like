@@ -21,54 +21,41 @@
     </header>
     <main>
       <section id="annonces">
-        <!-- Annonce 1 -->
-        <div class="annonce">
-          <h2>Offre d'emploi: Développeur Full Stack</h2>
-          <p>Description: Recherche un développeur Full Stack expérimenté.</p>
-          <p>Salaire: 50000€</p>
-          <p>Lieu: Paris</p>
-          <button class="btn" onclick="showDetails(this)">
-            En savoir plus
-          </button>
-          <div class="details">
-            <p>Plus de détails sur l'offre d'emploi...</p>
-            <button class="btn" onclick="showApplicationForm()">
-              Postuler
-            </button>
-          </div>
-        </div>
-        <!-- Annonce 2 -->
-        <div class="annonce">
-          <h2>Offre d'emploi: Analyste Financier</h2>
-          <p>Description: Poste d'analyste financier junior.</p>
-          <p>Salaire: 40000€</p>
-          <p>Lieu: Lyon</p>
-          <button class="btn" onclick="showDetails(this)">
-            En savoir plus
-          </button>
-          <div class="details">
-            <p>Plus de détails sur l'offre d'emploi...</p>
-            <button class="btn" onclick="showApplicationForm()">
-              Postuler
-            </button>
-          </div>
-        </div>
-        <!-- Annonce 3 -->
-        <div class="annonce">
-          <h2>Offre d'emploi: Infirmier</h2>
-          <p>Description: Besoin d'un infirmier pour un hôpital.</p>
-          <p>Salaire: 35000€</p>
-          <p>Lieu: Marseille</p>
-          <button class="btn" onclick="showDetails(this)">
-            En savoir plus
-          </button>
-          <div class="details">
-            <p>Plus de détails sur l'offre d'emploi...</p>
-            <button class="btn" onclick="showApplicationForm()">
-              Postuler
-            </button>
-          </div>
-        </div>
+        <script>
+          // Récupérer les données depuis le serveur
+          fetch("http://localhost:3000/annonces")
+            .then((response) => response.json())
+            .then((annonces) => {
+              // Sélectionner la section où les annonces doivent être affichées
+              const sectionAnnonces = document.getElementById("annonces");
+
+              // Créer les éléments HTML pour chaque annonce
+              annonces.forEach((annonce) => {
+                const divAnnonce = document.createElement("div");
+                divAnnonce.className = "annonce";
+
+                const h2 = document.createElement("h2");
+                h2.textContent = `Offre d'emploi: ${annonce.titre}`;
+
+                const pDescription = document.createElement("p");
+                pDescription.textContent = `Description: ${annonce.description}`;
+
+                const pSalaire = document.createElement("p");
+                pSalaire.textContent = `Salaire: ${annonce.salaire}€`;
+
+                const pLieu = document.createElement("p");
+                pLieu.textContent = `Lieu: ${annonce.lieu}`;
+
+                const button = document.createElement("button");
+                button.className = "btn";
+                button.onclick = () => showDetails(annonce);
+                button.textContent = "En savoir plus";
+
+                divAnnonce.append(h2, pDescription, pSalaire, pLieu, button);
+                sectionAnnonces.appendChild(divAnnonce);
+              });
+            });
+        </script>
       </section>
     </main>
     <footer>
