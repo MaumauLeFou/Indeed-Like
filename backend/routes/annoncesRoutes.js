@@ -2,10 +2,14 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../db");
 
-// Route pour récupérer toutes les annonces
+// Route pour récupérer toutes les annonces + infos entreprises
 router.get("/annonces", async (req, res) => {
   try {
-    const { rows } = await pool.query("SELECT * FROM annonces");
+    const { rows } = await pool.query(`
+      SELECT annonces.*, entreprises.nom AS entreprise 
+      FROM annonces 
+      INNER JOIN entreprises ON annonces.id_entreprise = entreprises.id_entreprise
+    `);
     res.json(rows);
   } catch (error) {
     console.error("Erreur lors de la récupération des annonces", error);
@@ -14,6 +18,18 @@ router.get("/annonces", async (req, res) => {
       .json({ message: "Erreur lors de la récupération des annonces" });
   }
 });
+// Route pour récupérer toutes les annonces
+// router.get("/annonces", async (req, res) => {
+//   try {
+//     const { rows } = await pool.query("SELECT * FROM annonces");
+//     res.json(rows);
+//   } catch (error) {
+//     console.error("Erreur lors de la récupération des annonces", error);
+//     res
+//       .status(500)
+//       .json({ message: "Erreur lors de la récupération des annonces" });
+//   }
+// });
 
 // Route pour créer une nouvelle annonce
 router.post("/annonces", async (req, res) => {

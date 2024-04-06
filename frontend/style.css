@@ -137,6 +137,7 @@ footer {
   cursor: pointer;
   text-decoration: none;
   transition: background-color 0.3s ease;
+  margin-bottom: 10px;
 }
 
 .annonce .btn:hover {
@@ -181,4 +182,92 @@ footer {
 .sliding-menu ul li a:hover {
   color: #fff;
   text-decoration: underline;
+}
+
+#search {
+  width: 33%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+.details {
+  display: none;
+}
+
+#applicationModal {
+  display: none; /* Par défaut, le modal est caché */
+  position: fixed; /* Fixe le modal au-dessus du contenu */
+  z-index: 1; /* Le z-index assure que le modal s'affiche au-dessus du reste du contenu */
+  left: 0;
+  top: 0;
+  width: 100%; /* Largeur et hauteur couvrent l'écran entier */
+  height: 100%;
+  overflow: auto; /* Permet le défilement si nécessaire */
+  background-color: rgb(0, 0, 0); /* Couleur d'arrière-plan */
+  background-color: rgba(0, 0, 0, 0.4); /* Arrière-plan noir avec opacité */
+}
+
+#applicationModal .modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% depuis le haut et centré */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Largeur du modal */
+}
+
+#applicationModal form {
+  display: flex;
+  flex-direction: column; /* Les éléments du formulaire sont empilés verticalement */
+}
+
+#applicationModal label {
+  margin-bottom: 0.1em;
+  color: #333;
+  font-size: 1em;
+}
+
+#applicationModal input[type="text"],
+#applicationModal input[type="email"],
+#applicationModal input[type="tel"],
+#applicationModal input[type="file"] {
+  padding: 0.1em;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  font-size: 1em;
+  outline: none;
+}
+
+#applicationModal button[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  height: 2em;
+}
+
+#applicationModal button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+#annulerForm {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  height: 2em;
+}
+
+.toast {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4caf50;
+  color: white;
+  padding: 10px;
+  border-radius: 2px;
+  text-align: center;
 }
